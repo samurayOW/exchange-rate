@@ -6,24 +6,20 @@ const rateEl = document.getElementById('rate');
 const swap = document.getElementById('swap');
 const switchBtn = document.querySelector('.switch-checkbox');
 
-function calculate() {
+async function calculate() {
   const currency_one = currencyEl_one.value;
   const currency_two = currencyEl_two.value;
-  fetch("https://open.exchangerate-api.com/v6/latest")
-    .then(res => res.json())
-    .then(data => {
-      //  console.log(data);
-      const rate = data.rates[currency_two] / data.rates[currency_one];
-      rateEl.innerText = `1 ${currency_one} = ${rate.toFixed(2)} ${currency_two}`;
-      amountEl_two.value = (amountEl_one.value * (rate)).toFixed(2);
-    });
+  const res = await fetch("https://open.exchangerate-api.com/v6/latest");
+  const data = await res.json();
+  const rate = data.rates[currency_two] / data.rates[currency_one];
+  rateEl.innerText = `1 ${currency_one} = ${rate.toFixed(2)} ${currency_two}`;
+  amountEl_two.value = (amountEl_one.value * (rate)).toFixed(2);
 }
 
 function switchTheme () {
     const root = document.querySelector(':root');
     root.classList.toggle('dark');
 }
-
 
 // Event Listener
 currencyEl_one.addEventListener('change', calculate);
